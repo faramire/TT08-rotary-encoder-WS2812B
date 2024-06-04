@@ -17,4 +17,7 @@ Explain how to use your project
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+Any arrangement of 12 WS2812B like controlled LEDs will work. More or less will also work, you will just not get the full range, or some LEDs will stay off.
+
+I bought this:
+LED Ring 5V RGB WS2812B 12-Bit 37mm

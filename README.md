@@ -1,6 +1,6 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout 6: Simple Stopwatch
+# Tiny Tapeout 8: Rotary Encoder Controlling WS2812B
 
 This is a verilog project to be realised in a "rideshare" open source ASIC organised by Tiny Tapeout.
 

@@ -1,11 +1,14 @@
 /*
- * Copyright (c) 2024 Your Name
+ * Copyright (c) 2024 Fabio Ramirez Stern
  * SPDX-License-Identifier: Apache-2.0
  */
 
 `default_nettype none
+`include "rotary_decoder.v"
+`include "position_counter.v"
+`include ""
 
-module tt_um_faramire_ws2812b_wrapper (
+module tt_um_faramire_rotary_ring_wrapper (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path

@@ -6,9 +6,10 @@
 `default_nettype none
 
 module debounce (
-  input wire clock, // clock
-  input wire res_n, // active low reset
-  input wire in,    // the input to be debounced
+  input  wire clock, // clock
+  input  wire res_n, // active low reset
+  input  wire in,    // the input to be debounced
+  
   output reg out    // debounced output
 );
 

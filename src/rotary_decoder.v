@@ -13,10 +13,11 @@ module rotary_decoder (
   * rotary_clk and rotary_dt can be swapped to change direction, their connection should be arbitrary.
   */
 
-  input wire clk, // 40MHz clock
-  input wire res_n, // active low reset
-  input wire rotary_clk, // output labeled clk of the rotary encoder (active low)
-  input wire rotary_dt,  // output labeled dt  of the rotary encoder (active low)
+  input  wire clk, // 40MHz clock
+  input  wire res_n, // active low reset
+  input  wire rotary_clk, // output labeled clk of the rotary encoder (active low)
+  input  wire rotary_dt,  // output labeled dt  of the rotary encoder (active low)
+
   output reg rotation_up,  // goes high for one clock cycle if rotated upwards (clockwise)
   output reg rotation_dn   // goes high for one clock cycle if rotated downwards (counter clockwise)
 );
@@ -71,7 +72,7 @@ module rotary_decoder (
           if (pause_counter == 16'b1001_1100_0011_1111) begin
             state <= WAIT;
           end else begin
-            pause_counter = pause_counter + 16'b1;
+            pause_counter <= pause_counter + 16'b1;
           end
         end // PAUSE
 

@@ -6,9 +6,9 @@
 `default_nettype none
 
 module led_ring_driver (
-  input  wire clock,   // clock (40 Mhz)
+  input  wire clk,     // clock (40 Mhz)
   input  wire res_n,   // active low reset
-  input  wire refresh,
+  input  wire refresh, // enables transmission start
   input  wire [11:0] led_mask, // one hot mask of which LEDs to turn on and which to keep off
   input  wire [ 1:0] colour,   // GRB mask
   input  wire [ 7:0] intensity,  // intensity for LEDs that are 1
@@ -17,7 +17,7 @@ module led_ring_driver (
   output reg busy
 );
 
-  wire skip_calc;
+  reg skip_calc;
 
   // input latches
   reg [11:0] reg_led_mask;

@@ -9,11 +9,11 @@ module rotary_decoder (
   
   /*
   * Rotary Encoder Decoder
-  * Takes the two outputs of a rotary coder and determines in which direction it was turned. Output as one hod encoding.
+  * Takes the two outputs of a rotary coder and determines in which direction it was turned. Output as one hot encoding.
   * rotary_clk and rotary_dt can be swapped to change direction, their connection should be arbitrary.
   */
 
-  input  wire clk, // 40MHz clock
+  input  wire clk,   // 40MHz clock
   input  wire res_n, // active low reset
   input  wire rotary_clk, // output labeled clk of the rotary encoder (active low)
   input  wire rotary_dt,  // output labeled dt  of the rotary encoder (active low)
@@ -33,7 +33,7 @@ module rotary_decoder (
   localparam WAIT      = 2'b11;
 
   // Pause counter
-  reg [15:0] pause_counter;
+  reg [14:0] pause_counter;
 
   always @(posedge clk) begin // process to monitor encoder
     
@@ -69,7 +69,7 @@ module rotary_decoder (
         PAUSE: begin // pause for 1 ms to debounce (40k clock cycles)
           rotation_up <= 0;
           rotation_dn <= 0;
-          if (pause_counter == 16'b1001_1100_0011_1111) begin
+          if (pause_counter == 15'b100_1110_0001_1111) begin
             state <= WAIT;
           end else begin
             pause_counter <= pause_counter + 16'b1;

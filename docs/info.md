@@ -9,12 +9,14 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-The rotary encoder adds/subtracts from a variable that determines which LED to turn on. Periodically, the chip sends out a signal for 12 LEDs out via ``uo0``, according to the WS2812B protocol. Further, the register value of the variable will be put out via ``uo2`` to ``uo5``. The button connected to ``in2`` toggles the LEDs.
+The rotary encoder adds/subtracts from a variable that determines which LED to turn on. Periodically, the chip sends out a signal for 12 LEDs out via ``uo0``, according to the WS2812B protocol. The button connected to ``in2`` inverts the LEDs, whether that happens gets also indicated through ``out1``. Further, the register value of the variable will be put out via ``out2`` to ``uo5``.
+The colour can be activated as follows: ``in3`` for green, ``in4`` for red and ``in5`` for blue.
+Intensity is set with the remaining two bits, ``in6`` and ``in7``.
 
 ## How to test
 
 Connect the rotary encoder outputs to ``in0`` and ``in1``. If your rotary encoder also has a built in push button, conntect that to ``in2``, or use another switch with a pull down resistor.
-The LEDs should be wired in series. The first LED's ``DIN`` input needs to be connected to the ``uo0`` (``out0``) of the chip.
+The LEDs should be wired in series. The first LED's ``DIN`` input needs to be connected to the ``out0`` of the chip.
 
 Give the project a reset after power up and then rotate the encoder back and forth to see the light moving.
 

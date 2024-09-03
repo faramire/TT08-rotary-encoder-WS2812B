@@ -4,9 +4,9 @@
  */
 
 `default_nettype none
+`include "controller.v"
 `include "rotary_decoder.v"
-`include "position_counter.v"
-`include ""
+`include "led_ring_driver.v"
 
 module tt_um_faramire_rotary_ring_wrapper (
     input  wire [7:0] ui_in,    // Dedicated inputs
@@ -19,12 +19,53 @@ module tt_um_faramire_rotary_ring_wrapper (
     input  wire       rst_n     // reset_n - low to reset
 );
 
+  wire refresh;
+  wire [11:0] led_mask;
+  wire [ 7:0] intensity;
+  wire [ 4:0] state_out;
+
+  wire rot_up;
+  wire rot_dn;
+
+  wire driver_busy;
+
+  controller ctr1 (
+    .clk(clk),
+    .res_n(rst_n),
+    .rot_up(rot_up),
+    .rot_dn(rot_dn),
+    .push(ui_in[2]),
+    .intensity_in(ui_in[7:6]),
+    .refresh(refresh),
+    .intensity(intensity),
+    .state_out(uo_out[5:1])
+  );
+
+  rotary_decoder rdec1 (
+    .clk(clk),
+    .res_n(rst_n),
+    .rotary_clk(ui_in[0]),
+    .rotary_dt(ui_in[1]),
+    .rotation_up(rot_up),
+    .rotation_dn(rot_dn)
+  );
+
+  led_ring_driver leddriv1 (
+    .clk(clk),
+    .res_n(rst_n),
+    .refresh(refresh),
+    .led_mask(led_mask),
+    .colour(ui_in[5:3]),
+    .intensity(intensity),
+    .led_dout(uo_out)
+  );
+  
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  assign uo_out[7:6] = 0;
   assign uio_out = 0;
   assign uio_oe  = 0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, uio_in[7:0], 1'b0};
 
 endmodule

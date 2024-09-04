@@ -73,6 +73,7 @@ module controller (
         12'b0010_0000_0000: led_binary <= 4'b1001;
         12'b0100_0000_0000: led_binary <= 4'b1010;
         12'b1000_0000_0000: led_binary <= 4'b1011;
+        default:;
       endcase
 
     end

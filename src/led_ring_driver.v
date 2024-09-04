@@ -13,8 +13,7 @@ module led_ring_driver (
   input  wire [ 2:0] colour,   // GRB mask
   input  wire [ 7:0] intensity,  // intensity for LEDs that are 1
 
-  output reg led_dout, // digital output to LEDs
-  output reg busy
+  output reg led_dout // digital output to LEDs
 );
 
   reg skip_calc;

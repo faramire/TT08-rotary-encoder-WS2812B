@@ -22,12 +22,11 @@ module tt_um_faramire_rotary_ring_wrapper (
   wire refresh;
   wire [11:0] led_mask;
   wire [ 7:0] intensity;
-  wire [ 4:0] state_out;
+
+  assign refresh = 1;
 
   wire rot_up;
   wire rot_dn;
-
-  wire driver_busy;
 
   controller ctr1 (
     .clk(clk),
@@ -58,8 +57,7 @@ module tt_um_faramire_rotary_ring_wrapper (
     .led_mask(led_mask),
     .colour(ui_in[5:3]),
     .intensity(intensity),
-    .led_dout(uo_out[0]),
-    .busy(driver_busy)
+    .led_dout(uo_out[0])
   );
   
   // All output pins must be assigned. If not used, assign to 0.

@@ -13,7 +13,6 @@ module controller (
   input  wire push,   // push button
   input  wire [1:0] intensity_in,
 
-  output reg  refresh,
   output wire [11:0] led_mask,
   output reg  [ 7:0] intensity_out,
   output wire [ 4:0] state_out

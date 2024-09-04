@@ -27,7 +27,7 @@ module controller (
 
   // Inversion
   always @(posedge clk) begin
-    if (!res) begin
+    if (!res_n) begin
       inverted <= 0;
     end else begin
       if (push) begin

@@ -4,9 +4,9 @@
  */
 
 `default_nettype none
-`include "controller.v"
-`include "rotary_decoder.v"
-`include "led_ring_driver.v"
+// `include "controller.v"
+// `include "rotary_decoder.v"
+// `include "led_ring_driver.v"
 
 module tt_um_faramire_rotary_ring_wrapper (
     input  wire [7:0] ui_in,    // Dedicated inputs

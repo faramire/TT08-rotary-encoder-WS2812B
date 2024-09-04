@@ -5,7 +5,7 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = rotary_ring_wrapper.v
+PROJECT_SOURCES = rotary_ring_wrapper.v controller.v rotary_decoder.v rotary_ring_driver.v
 
 
 ifneq ($(GATES),yes)

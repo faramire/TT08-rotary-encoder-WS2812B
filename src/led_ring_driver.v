@@ -8,7 +8,6 @@
 module led_ring_driver (
   input  wire clk,     // clock (40 Mhz)
   input  wire res_n,   // active low reset
-  input  wire refresh, // enables transmission start
   input  wire [11:0] led_mask, // one hot mask of which LEDs to turn on and which to keep off
   input  wire [ 2:0] colour,   // GRB mask
   input  wire [ 7:0] intensity,  // intensity for LEDs that are 1
@@ -25,7 +24,7 @@ module led_ring_driver (
 
   // FSM states
   reg [1:0] state;
-  localparam IDLE = 2'b00; // idle, wait for refresh
+  localparam IDLE = 2'b00; // start
   localparam CALC = 2'b01; // calc next timings
   localparam OUTP = 2'b10; // send data to LEDs, retun to CALC
   localparam TRES = 2'b11; // wait 50us (minimum reset time)
@@ -49,21 +48,19 @@ module led_ring_driver (
     end else begin
     case(state)
 
-      IDLE: begin // wait for refresh to go high, initiate all registers for transmission
-        if (refresh) begin
-          reg_led_mask  <= led_mask;
-          reg_colour    <= colour;
-          reg_intensity <= intensity;
-          rs_counter <= 0;
-          tl_counter <= 0;
-          tl_counter <= 0;
-          tl_counter <= 0;
-          skip_calc <= 0;
-          led_pos  <= 0;
-          grb_pos  <= 0;
-          byte_pos <= 0;
-          state <= CALC;
-        end
+      IDLE: begin //initiate all registers for transmission
+        reg_led_mask  <= led_mask;
+        reg_colour    <= colour;
+        reg_intensity <= intensity;
+        rs_counter <= 0;
+        tl_counter <= 0;
+        tl_counter <= 0;
+        tl_counter <= 0;
+        skip_calc <= 0;
+        led_pos  <= 0;
+        grb_pos  <= 0;
+        byte_pos <= 0;
+        state <= CALC;
       end // IDLE
 
       CALC: begin // calculate the timings needed to transmit the next bit, count through bytes of colour, the three colours and the 12 LEDs

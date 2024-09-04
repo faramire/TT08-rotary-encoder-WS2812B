@@ -19,11 +19,8 @@ module tt_um_faramire_rotary_ring_wrapper (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  wire refresh;
   wire [11:0] led_mask;
   wire [ 7:0] intensity;
-
-  assign refresh = 1;
 
   wire rot_up;
   wire rot_dn;
@@ -36,7 +33,6 @@ module tt_um_faramire_rotary_ring_wrapper (
     .push(ui_in[2]),
     .led_mask(led_mask),
     .intensity_in(ui_in[7:6]),
-    .refresh(refresh),
     .intensity_out(intensity),
     .state_out(uo_out[5:1])
   );
@@ -53,7 +49,6 @@ module tt_um_faramire_rotary_ring_wrapper (
   led_ring_driver leddriv1 (
     .clk(clk),
     .res_n(rst_n),
-    .refresh(refresh),
     .led_mask(led_mask),
     .colour(ui_in[5:3]),
     .intensity(intensity),

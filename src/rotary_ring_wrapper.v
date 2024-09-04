@@ -19,21 +19,22 @@ module tt_um_faramire_rotary_ring_wrapper (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  wire [11:0] led_mask;
-  wire [ 7:0] intensity;
+  wire [11:0] led_mask_wire;
+  wire [ 7:0] intensity_wire;
 
-  wire rot_up;
-  wire rot_dn;
+  wire rot_up_wire;
+  wire rot_dn_wire;
 
   controller ctr1 (
     .clk(clk),
     .res_n(rst_n),
-    .rot_up(rot_up),
-    .rot_dn(rot_dn),
+    .rot_up(rot_up_wire),
+    .rot_dn(rot_dn_wire),
     .push(ui_in[2]),
-    .led_mask(led_mask),
     .intensity_in(ui_in[7:6]),
-    .intensity_out(intensity),
+
+    .led_mask(led_mask_wire),
+    .intensity_out(intensity_wire),
     .state_out(uo_out[5:1])
   );
 
@@ -42,25 +43,27 @@ module tt_um_faramire_rotary_ring_wrapper (
     .res_n(rst_n),
     .rotary_clk(ui_in[0]),
     .rotary_dt(ui_in[1]),
-    .rotation_up(rot_up),
-    .rotation_dn(rot_dn)
+    
+    .rotation_up(rot_up_wire),
+    .rotation_dn(rot_dn_wire)
   );
 
   led_ring_driver leddriv1 (
     .clk(clk),
     .res_n(rst_n),
-    .led_mask(led_mask),
+    .led_mask(led_mask_wire),
     .colour(ui_in[5:3]),
-    .intensity(intensity),
+    .intensity(intensity_wire),
+
     .led_dout(uo_out[0])
   );
   
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out[7:6] = 0;
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+  assign uo_out[7:6] = 2'b0;
+  assign uio_out = 8'b0;
+  assign uio_oe  = 8'b0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, uio_in[7:0], 1'b0};
+  wire _unused = &{ena, ui_in[7:6], uio_in[7:0], 1'b0};
 
 endmodule

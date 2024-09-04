@@ -15,38 +15,47 @@ module controller (
 
   output wire [11:0] led_mask,
   output reg  [ 7:0] intensity_out,
-  output wire [ 4:0] state_out
+  output reg  [ 4:0] state_out
 );
 
   // State
   reg inverted;
   reg [3:0] led_binary;
-  assign state_out = {inverted, led_binary};
 
   reg [11:0] led_mask_i; // internal, without inversion
   assign led_mask = {12{inverted}} ^ led_mask_i;
 
   // Inversion
   always @(posedge clk) begin
-    if (push) begin
+    if (!res) begin
+      inverted <= 0;
+    end else begin
+      if (push) begin
         inverted <= ~inverted;
       end
+    end
   end
 
   // Intensity
   always @(posedge clk) begin
-    case(intensity_in[1:0])
-      2'b00: intensity_out <= 8'b0000_0001;
-      2'b01: intensity_out <= 8'b0000_0010;
-      2'b10: intensity_out <= 8'b0000_1000;
-      2'b11: intensity_out <= 8'b0010_0000;
-    endcase
+    if (!res_n) begin
+      intensity_out <= 8'b0000_0001;
+    end else begin
+      case(intensity_in[1:0])
+        2'b00: intensity_out <= 8'b0000_0001;
+        2'b01: intensity_out <= 8'b0000_0010;
+        2'b10: intensity_out <= 8'b0000_1000;
+        2'b11: intensity_out <= 8'b0010_0000;
+        default:;
+      endcase
+    end
   end
   
   // LED
   always @(posedge clk) begin
     if (!res_n) begin //reset
       led_mask_i <= 12'b0000_0000_0001;
+      state_out  <= 5'b1_1111;
       led_binary <= 4'b0;
       inverted <= 0;
     end else begin
@@ -73,6 +82,8 @@ module controller (
         12'b1000_0000_0000: led_binary <= 4'b1011;
         default:;
       endcase
+
+      state_out <= {inverted, led_binary};
 
     end
   end

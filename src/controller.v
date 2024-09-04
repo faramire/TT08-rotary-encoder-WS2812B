@@ -26,6 +26,23 @@ module controller (
 
   reg [11:0] led_mask_i;
   assign led_mask = {12{inverted}} ^ led_mask_i;
+
+  // Inversion
+  always @(posedge clk) begin
+    if (push) begin
+        inverted <= ~inverted;
+      end
+  end
+
+  // Intensity
+  always @(posedge clk) begin
+    case(intensity_in[1:0])
+      2'b00: intensity_out = 8'b0000_0001;
+      2'b01: intensity_out = 8'b0000_0010;
+      2'b10: intensity_out = 8'b0000_1000;
+      2'b11: intensity_out = 8'b0010_0000;
+    endcase
+  end
   
   // LED
   always @(posedge clk) begin
@@ -36,11 +53,6 @@ module controller (
       inverted <= 0;
     end else begin
 
-      // Inversion
-      if (push) begin
-        inverted <= ~inverted;
-      end
-
       // Counting
       if (rot_up) begin
         led_mask_i = (led_mask_i << 1) | (led_mask_i >> 11); // shift with rotate
@@ -48,12 +60,19 @@ module controller (
         led_mask_i = (led_mask_i >> 1) | (led_mask_i >> 11);
       end
 
-      // Intensity
-      case(intensity_in[1:0])
-        2'b00: intensity_out = 8'b0000_0001;
-        2'b01: intensity_out = 8'b0000_0010;
-        2'b10: intensity_out = 8'b0000_1000;
-        2'b11: intensity_out = 8'b0010_0000;
+      case(led_mask_i)
+        12'b0000_0000_0001: led_binary <= 4'b0000;
+        12'b0000_0000_0010: led_binary <= 4'b0001;
+        12'b0000_0000_0100: led_binary <= 4'b0010;
+        12'b0000_0000_1000: led_binary <= 4'b0011;
+        12'b0000_0001_0000: led_binary <= 4'b0100;
+        12'b0000_0010_0000: led_binary <= 4'b0101;
+        12'b0000_0100_0000: led_binary <= 4'b0110;
+        12'b0000_1000_0000: led_binary <= 4'b0111;
+        12'b0001_0000_0000: led_binary <= 4'b1000;
+        12'b0010_0000_0000: led_binary <= 4'b1001;
+        12'b0100_0000_0000: led_binary <= 4'b1010;
+        12'b1000_0000_0000: led_binary <= 4'b1011;
       endcase
 
     end

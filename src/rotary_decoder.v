@@ -62,7 +62,7 @@ module rotary_decoder (
         OUTPUT: begin // copy the detected state to the outputs and go to next state where they will be set to 0 again => on for one clock
           rotation_up <= up_detected;
           rotation_dn <= dn_detected;
-          pause_counter = 16'b0;
+          pause_counter <= 15'b0;
           state <= PAUSE;
         end //OUTPUT
 
@@ -72,7 +72,7 @@ module rotary_decoder (
           if (pause_counter == 15'b100_1110_0001_1111) begin
             state <= WAIT;
           end else begin
-            pause_counter <= pause_counter + 16'b1;
+            pause_counter <= pause_counter + 15'b1;
           end
         end // PAUSE
 

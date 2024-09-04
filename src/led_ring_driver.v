@@ -25,7 +25,7 @@ module led_ring_driver (
   reg  [7:0] reg_intensity;
 
   // FSM states
-  reg [3:0] state;
+  reg [1:0] state;
   localparam IDLE = 2'b00; // idle, wait for refresh
   localparam CALC = 2'b01; // calc next timings
   localparam OUTP = 2'b10; // send data to LEDs, retun to CALC
@@ -36,10 +36,10 @@ module led_ring_driver (
   reg  [5:0] tl_max;
   reg  [5:0] th_counter; // counter for high time (16/32 clk cycles)
   reg  [5:0] th_max;
-  reg [11:0] rs_counter; // counter for reset time (4000 clk cycles)
+  reg [10:0] rs_counter; // counter for reset time (4000 clk cycles)
   reg  [3:0] led_pos;    // led position counter (0..11)
   reg  [1:0] grb_pos;    // green, red, blue counter (0..2)
-  reg  [3:0] byte_pos;   // grb byte counter (0..7)
+  reg  [2:0] byte_pos;   // grb byte counter (0..7)
 
 
   always @(posedge clk) begin
@@ -78,7 +78,7 @@ module led_ring_driver (
           end
 
           if (byte_pos < 7) begin // advance to next bit
-            byte_pos = byte_pos + 1;
+            byte_pos <= byte_pos + 1;
           end else begin // end of colour byte, advance to next colour byte
             if (grb_pos < 2) begin
               byte_pos <= 0;
@@ -101,7 +101,7 @@ module led_ring_driver (
       OUTP: begin // output one bit according to the WS281B
         if (tl_counter < tl_max) begin // hold low, count cycles
           led_dout <= 0;
-          tl_counter = tl_counter + 6'b1;
+          tl_counter <= tl_counter + 6'b1;
         end else begin // hold high, count cycles
           if(th_counter < th_max) begin
             led_dout <= 1;
@@ -118,7 +118,7 @@ module led_ring_driver (
 
       TRES: begin // wait for the minimum reset time (t_res), then advance to IDLE
         led_dout <= 0;
-        if (rs_counter == 11'b111_1101_0000) begin
+        if (rs_counter >= 11'b111_1101_0000) begin
           state <= IDLE;
         end else begin
           rs_counter <= rs_counter + 11'b1;

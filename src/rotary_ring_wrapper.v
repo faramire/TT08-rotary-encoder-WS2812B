@@ -35,6 +35,7 @@ module tt_um_faramire_rotary_ring_wrapper (
     .rot_up(rot_up),
     .rot_dn(rot_dn),
     .push(ui_in[2]),
+    .led_mask(led_mask),
     .intensity_in(ui_in[7:6]),
     .refresh(refresh),
     .intensity_out(intensity),
@@ -57,7 +58,8 @@ module tt_um_faramire_rotary_ring_wrapper (
     .led_mask(led_mask),
     .colour(ui_in[5:3]),
     .intensity(intensity),
-    .led_dout(uo_out[0])
+    .led_dout(uo_out[0]),
+    .busy(driver_busy)
   );
   
   // All output pins must be assigned. If not used, assign to 0.
@@ -66,6 +68,6 @@ module tt_um_faramire_rotary_ring_wrapper (
   assign uio_oe  = 0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, uio_in[7:0], 1'b0};
+  wire _unused = &{ena, uio_in[7:0], driver_busy, 1'b0};
 
 endmodule

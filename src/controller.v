@@ -37,10 +37,10 @@ module controller (
   // Intensity
   always @(posedge clk) begin
     case(intensity_in[1:0])
-      2'b00: intensity_out = 8'b0000_0001;
-      2'b01: intensity_out = 8'b0000_0010;
-      2'b10: intensity_out = 8'b0000_1000;
-      2'b11: intensity_out = 8'b0010_0000;
+      2'b00: intensity_out <= 8'b0000_0001;
+      2'b01: intensity_out <= 8'b0000_0010;
+      2'b10: intensity_out <= 8'b0000_1000;
+      2'b11: intensity_out <= 8'b0010_0000;
     endcase
   end
   
@@ -55,9 +55,9 @@ module controller (
 
       // Counting
       if (rot_up) begin
-        led_mask_i = (led_mask_i << 1) | (led_mask_i >> 11); // shift with rotate
+        led_mask_i <= (led_mask_i << 1) | (led_mask_i >> 11); // shift with rotate
       end else if (rot_dn) begin
-        led_mask_i = (led_mask_i >> 1) | (led_mask_i >> 11);
+        led_mask_i <= (led_mask_i >> 1) | (led_mask_i >> 11);
       end
 
       case(led_mask_i)

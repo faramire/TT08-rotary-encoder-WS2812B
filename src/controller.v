@@ -57,7 +57,6 @@ module controller (
       led_mask_i <= 12'b0000_0000_0001;
       state_out  <= 5'b1_1111;
       led_binary <= 4'b0;
-      inverted <= 0;
     end else begin
 
       // Counting

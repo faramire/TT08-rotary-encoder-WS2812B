@@ -24,7 +24,7 @@ module controller (
   reg [3:0] led_binary;
   assign state_out = {inverted, led_binary};
 
-  reg [11:0] led_mask_i;
+  reg [11:0] led_mask_i; // internal, without inversion
   assign led_mask = {12{inverted}} ^ led_mask_i;
 
   // Inversion

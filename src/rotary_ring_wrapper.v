@@ -37,7 +37,7 @@ module tt_um_faramire_rotary_ring_wrapper (
     .push(ui_in[2]),
     .intensity_in(ui_in[7:6]),
     .refresh(refresh),
-    .intensity(intensity),
+    .intensity_out(intensity),
     .state_out(uo_out[5:1])
   );
 
@@ -57,7 +57,7 @@ module tt_um_faramire_rotary_ring_wrapper (
     .led_mask(led_mask),
     .colour(ui_in[5:3]),
     .intensity(intensity),
-    .led_dout(uo_out)
+    .led_dout(uo_out[0])
   );
   
   // All output pins must be assigned. If not used, assign to 0.

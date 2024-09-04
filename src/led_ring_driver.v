@@ -10,7 +10,7 @@ module led_ring_driver (
   input  wire res_n,   // active low reset
   input  wire refresh, // enables transmission start
   input  wire [11:0] led_mask, // one hot mask of which LEDs to turn on and which to keep off
-  input  wire [ 1:0] colour,   // GRB mask
+  input  wire [ 2:0] colour,   // GRB mask
   input  wire [ 7:0] intensity,  // intensity for LEDs that are 1
 
   output reg led_dout, // digital output to LEDs
@@ -21,7 +21,7 @@ module led_ring_driver (
 
   // input latches
   reg [11:0] reg_led_mask;
-  reg  [1:0] reg_colour;
+  reg  [2:0] reg_colour;
   reg  [7:0] reg_intensity;
 
   // FSM states
@@ -42,7 +42,7 @@ module led_ring_driver (
   reg  [3:0] byte_pos;   // grb byte counter (0..7)
 
 
-  always @(posedge clock) begin
+  always @(posedge clk) begin
     
     if (!res_n) begin
       led_dout <= 0;
@@ -80,7 +80,7 @@ module led_ring_driver (
           if (byte_pos < 7) begin // advance to next bit
             byte_pos = byte_pos + 1;
           end else begin // end of colour byte, advance to next colour byte
-            if (gbr_pos < 2) begin
+            if (grb_pos < 2) begin
               byte_pos <= 0;
               grb_pos <= grb_pos + 1;
             end else begin // end of LED colour word, advance to next LED
@@ -119,7 +119,7 @@ module led_ring_driver (
       TRES: begin // wait for the minimum reset time (t_res), then advance to IDLE
         led_dout <= 0;
         if (rs_counter == 11'b111_1101_0000) begin
-          state <= WAIT;
+          state <= IDLE;
         end else begin
           rs_counter <= rs_counter + 11'b1;
         end

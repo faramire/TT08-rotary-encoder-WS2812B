@@ -46,7 +46,6 @@ module controller (
   // LED
   always @(posedge clk) begin
     if (!res_n) begin //reset
-      refresh <= 0;
       led_mask_i <= 12'b0000_0000_0001;
       led_binary <= 4'b0;
       inverted <= 0;
